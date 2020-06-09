@@ -853,7 +853,7 @@ void fgn_copy_rect(uint8_t *src, int32_t src_stride, uint8_t *dst, int32_t dst_s
                    int32_t width, int32_t height, int32_t use_high_bit_depth) {
     int32_t hbd_coeff = use_high_bit_depth ? 2 : 1;
     while (height) {
-        memcpy(dst, src, width * sizeof(uint8_t) * hbd_coeff);
+        eb_memcpy((void*)dst, (void*)src, width * sizeof(uint8_t) * hbd_coeff);
         src += src_stride * hbd_coeff;
         dst += dst_stride * hbd_coeff;
         --height;
@@ -864,7 +864,7 @@ void fgn_copy_rect(uint8_t *src, int32_t src_stride, uint8_t *dst, int32_t dst_s
 static void copy_area(int32_t *src, int32_t src_stride, int32_t *dst, int32_t dst_stride,
                       int32_t width, int32_t height) {
     while (height) {
-        memcpy(dst, src, width * sizeof(*src));
+        eb_memcpy((void*)dst, (void*)src, width * sizeof(*src));
         src += src_stride;
         dst += dst_stride;
         --height;
@@ -1038,8 +1038,8 @@ void eb_av1_add_film_grain_run(AomFilmGrain *params, uint8_t *luma, uint8_t *cb,
     init_scaling_function(params->scaling_points_y, params->num_y_points, scaling_lut_y);
 
     if (params->chroma_scaling_from_luma) {
-        memcpy(scaling_lut_cb, scaling_lut_y, sizeof(*scaling_lut_y) * 256);
-        memcpy(scaling_lut_cr, scaling_lut_y, sizeof(*scaling_lut_y) * 256);
+        eb_memcpy((void*)scaling_lut_cb, (void*)scaling_lut_y, sizeof(*scaling_lut_y) * 256);
+        eb_memcpy((void*)scaling_lut_cr, (void*)scaling_lut_y, sizeof(*scaling_lut_y) * 256);
     } else {
         init_scaling_function(params->scaling_points_cb, params->num_cb_points, scaling_lut_cb);
         init_scaling_function(params->scaling_points_cr, params->num_cr_points, scaling_lut_cr);

@@ -2285,7 +2285,7 @@ void copy_api_from_app(
     scs_ptr->static_config.enable_manual_pred_struct    = config_struct->enable_manual_pred_struct;
     if(scs_ptr->static_config.enable_manual_pred_struct){
         scs_ptr->static_config.manual_pred_struct_entry_num = config_struct->manual_pred_struct_entry_num;
-        memcpy(&scs_ptr->static_config.pred_struct[0], &config_struct->pred_struct[0],config_struct->manual_pred_struct_entry_num*sizeof(PredictionStructureConfigEntry));
+        eb_memcpy(&scs_ptr->static_config.pred_struct[0], &config_struct->pred_struct[0],config_struct->manual_pred_struct_entry_num*sizeof(PredictionStructureConfigEntry));
         switch (scs_ptr->static_config.manual_pred_struct_entry_num) {
             case 1:
                 scs_ptr->static_config.hierarchical_levels =  0;
@@ -3528,7 +3528,7 @@ static void copy_output_recon_buffer(
     dst->flags = src->flags;
     dst->pic_type = src->pic_type;
     if (src->p_buffer)
-        eb_memcpy(dst->p_buffer, src->p_buffer, src->n_filled_len);
+        eb_memcpy((void*)dst->p_buffer, (void*)src->p_buffer, src->n_filled_len);
 
     return;
 }

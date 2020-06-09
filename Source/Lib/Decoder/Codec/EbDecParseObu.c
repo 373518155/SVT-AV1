@@ -962,8 +962,8 @@ void read_loop_filter_params(Bitstrm *bs, EbDecHandle *dec_handle, int num_plane
 
     if (dec_handle->prev_frame) {
         // write deltas to frame buffer
-        memcpy(lf->ref_deltas, dec_handle->prev_frame->ref_deltas, REF_FRAMES);
-        memcpy(lf->mode_deltas, dec_handle->prev_frame->mode_deltas, MAX_MODE_LF_DELTAS);
+        eb_memcpy((void*)lf->ref_deltas, (void*)dec_handle->prev_frame->ref_deltas, REF_FRAMES);
+        eb_memcpy((void*)lf->mode_deltas, (void*)dec_handle->prev_frame->mode_deltas, MAX_MODE_LF_DELTAS);
     }
     else {
         av1_set_default_ref_and_mode_deltas(lf->ref_deltas, lf->mode_deltas);
@@ -1009,8 +1009,8 @@ void read_loop_filter_params(Bitstrm *bs, EbDecHandle *dec_handle, int num_plane
     }
 
     /*write deltas to prev_frame buffer*/
-    memcpy(dec_handle->cur_pic_buf[0]->ref_deltas, lf->ref_deltas, REF_FRAMES);
-    memcpy(dec_handle->cur_pic_buf[0]->mode_deltas, lf->mode_deltas, MAX_MODE_LF_DELTAS);
+    eb_memcpy((void*)dec_handle->cur_pic_buf[0]->ref_deltas, (void*)lf->ref_deltas, REF_FRAMES);
+    eb_memcpy((void*)dec_handle->cur_pic_buf[0]->mode_deltas, (void*)lf->mode_deltas, MAX_MODE_LF_DELTAS);
 }
 
 void read_tx_mode(Bitstrm *bs, FrameHeader *frame_info) {
@@ -1234,8 +1234,8 @@ void read_global_motion_params(Bitstrm *bs, EbDecHandle *dec_handle, FrameHeader
             EbWarpedMotionParams *wm_global =
                 &dec_handle->master_frame_buf.cur_frame_bufs[0].global_motion_warp[ref];
             wm_global->wmtype = cur_buf->global_motion[ref].gm_type;
-            memcpy(wm_global->wmmat,
-                   cur_buf->global_motion[ref].gm_params,
+            eb_memcpy((void*)wm_global->wmmat,
+                    (void*)cur_buf->global_motion[ref].gm_params,
                    sizeof(cur_buf->global_motion[ref].gm_params));
             int return_val = eb_get_shear_params(wm_global);
             assert(1 == return_val);
@@ -1648,8 +1648,8 @@ void set_prev_frame_info(EbDecHandle *dec_handle_ptr) {
     dec_mt_frame_data->prev_frame_info.frame_header_read = EB_TRUE;
     dec_mt_frame_data->prev_frame_info.prev_sb_size =
         dec_handle_ptr->seq_header.sb_size;
-    memcpy(&dec_mt_frame_data->prev_frame_info.prev_tiles_info,
-        &tiles_info, sizeof(TilesInfo));
+    eb_memcpy((void*)&dec_mt_frame_data->prev_frame_info.prev_tiles_info,
+        (void*)&tiles_info, sizeof(TilesInfo));
 }
 
 static void realloc_parse_memory(EbDecHandle *dec_handle_ptr) {

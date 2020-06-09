@@ -135,9 +135,9 @@ static void equation_system_clear(AomEquationSystem *eqns) {
 
 static void equation_system_copy(AomEquationSystem *dst, const AomEquationSystem *src) {
     const int32_t n = dst->n;
-    memcpy(dst->A, src->A, sizeof(*dst->A) * n * n);
-    memcpy(dst->x, src->x, sizeof(*dst->x) * n);
-    memcpy(dst->b, src->b, sizeof(*dst->b) * n);
+    eb_memcpy(dst->A, src->A, sizeof(*dst->A) * n * n);
+    eb_memcpy(dst->x, src->x, sizeof(*dst->x) * n);
+    eb_memcpy(dst->b, src->b, sizeof(*dst->b) * n);
 }
 
 static int32_t equation_system_init(AomEquationSystem *eqns, int32_t n) {
@@ -165,8 +165,8 @@ static int32_t equation_system_solve(AomEquationSystem *eqns) {
         free(A);
         return 0;
     }
-    memcpy(A, eqns->A, sizeof(*eqns->A) * n * n);
-    memcpy(b, eqns->b, sizeof(*eqns->b) * n);
+    eb_memcpy(A, eqns->A, sizeof(*eqns->A) * n * n);
+    eb_memcpy(b, eqns->b, sizeof(*eqns->b) * n);
     ret = linsolve(n, A, eqns->n, b, eqns->x);
     free(b);
     free(A);
@@ -300,7 +300,7 @@ int32_t eb_aom_noise_strength_solver_solve(AomNoiseStrengthSolver *solver) {
         SVT_ERROR("Unable to allocate copy of A\n");
         return 0;
     }
-    memcpy(A, old_a, sizeof(*A) * n * n);
+    eb_memcpy(A, old_a, sizeof(*A) * n * n);
 
     for (int32_t i = 0; i < n; ++i) {
         const int32_t i_lo = AOMMAX(0, i - 1);
@@ -667,7 +667,7 @@ int32_t eb_aom_noise_model_init(AomNoiseModel *model, const AomNoiseModelParams 
         return 0;
     }
 
-    memcpy(&model->params, &params, sizeof(params));
+    eb_memcpy((void*)&model->params, (void*)&params, sizeof(params));
     for (c = 0; c < 3; ++c) {
         if (!noise_state_init(&model->combined_state[c], n + (c > 0), bit_depth)) {
             SVT_ERROR("Failed to allocate noise state for channel %d\n", c);
@@ -1691,11 +1691,11 @@ int32_t eb_aom_denoise_and_model_run(struct AomDenoiseAndModel *ctx, EbPictureBu
         film_grain->apply_grain = 1;
 
         if (!use_highbd) {
-            memcpy(raw_data[0], ctx->denoised[0], (strides[0] * sd->height) << use_highbd);
-            memcpy(raw_data[1],
+            eb_memcpy(raw_data[0], ctx->denoised[0], (strides[0] * sd->height) << use_highbd);
+            eb_memcpy(raw_data[1],
                    ctx->denoised[1],
                    (strides[1] * (sd->height >> chroma_sub_log2[0])) << use_highbd);
-            memcpy(raw_data[2],
+            eb_memcpy(raw_data[2],
                    ctx->denoised[2],
                    (strides[2] * (sd->height >> chroma_sub_log2[0])) << use_highbd);
         } else

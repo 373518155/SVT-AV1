@@ -100,7 +100,7 @@ void eb_av1_filter_intra_edge_high_c_old(uint8_t *p, int32_t sz, int32_t strengt
     const int32_t filt = strength - 1;
     uint8_t edge[129];
 
-    memcpy(edge, p, sz * sizeof(*p));
+    eb_memcpy((void*)edge, (void*)p, sz * sizeof(*p));
     for (int32_t i = 1; i < sz; i++) {
         int32_t s = 0;
         for (int32_t j = 0; j < INTRA_EDGE_TAPS; j++) {
@@ -903,7 +903,7 @@ static INLINE void v_predictor(uint8_t *dst, ptrdiff_t stride, int32_t bw, int32
     (void)left;
 
     for (r = 0; r < bh; r++) {
-        memcpy(dst, above, bw);
+        eb_memcpy((void*)dst, (void*)above, bw);
         dst += stride;
     }
 }
@@ -1014,7 +1014,7 @@ static INLINE void highbd_v_predictor(uint16_t *dst, ptrdiff_t stride, int32_t b
     (void)left;
     (void)bd;
     for (r = 0; r < bh; r++) {
-        memcpy(dst, above, bw * sizeof(uint16_t));
+        eb_memcpy((void*)dst, (void*)above, bw * sizeof(uint16_t));
         dst += stride;
     }
 }
@@ -2476,7 +2476,7 @@ void eb_av1_filter_intra_edge_high_c(uint16_t *p, int32_t sz, int32_t strength)
     const int32_t filt = strength - 1;
     uint16_t edge[129];
 
-    memcpy(edge, p, sz * sizeof(*p));
+    eb_memcpy((void*)edge, (void*)p, sz * sizeof(*p));
     for (int32_t i = 1; i < sz; i++) {
         int32_t s = 0;
         for (int32_t j = 0; j < INTRA_EDGE_TAPS; j++) {
@@ -2571,7 +2571,7 @@ void highbd_filter_intra_predictor(uint16_t *dst, ptrdiff_t stride,
         memset(buffer[r], 0, (bw + 1) * sizeof(buffer[0][0]));
 
     for (r = 0; r < bh; ++r) buffer[r + 1][0] = left[r];
-    memcpy(buffer[0], &above[-1], (bw + 1) * sizeof(buffer[0][0]));
+    eb_memcpy((void*)buffer[0], (void*)&above[-1], (bw + 1) * sizeof(buffer[0][0]));
 
     for (r = 1; r < bh + 1; r += 2)
         for (c = 1; c < bw + 1; c += 4) {
@@ -2600,7 +2600,7 @@ void highbd_filter_intra_predictor(uint16_t *dst, ptrdiff_t stride,
         }
 
     for (r = 0; r < bh; ++r) {
-        memcpy(dst, &buffer[r + 1][1], bw * sizeof(dst[0]));
+        eb_memcpy((void*)dst, (void*)&buffer[r + 1][1], bw * sizeof(dst[0]));
         dst += stride;
     }
 }
