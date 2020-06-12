@@ -1243,12 +1243,11 @@ void eb_av1_pick_filter_level(DlfContext *         context_ptr,
     const int32_t num_planes = 3;
     (void)srcBuffer;
     struct LoopFilter *const lf = &frm_hdr->loop_filter_params;
-    lf->sharpness_level         = frm_hdr->frame_type == KEY_FRAME ? 0 : 0;
+    lf->sharpness_level         = 0;
 
-    if (method == LPF_PICK_MINIMAL_LPF) {
-        lf->filter_level[0] = 0;
-        lf->filter_level[1] = 0;
-    } else if (method >= LPF_PICK_FROM_Q) {
+    if (method == LPF_PICK_MINIMAL_LPF)
+        lf->filter_level[0] = lf->filter_level[1] = 0;
+    else if (method >= LPF_PICK_FROM_Q) {
         const int32_t min_filter_level = 0;
         const int32_t max_filter_level = MAX_LOOP_FILTER; // av1_get_max_filter_level(cpi);
         const int32_t q                = eb_av1_ac_quant_q3(frm_hdr->quantization_params.base_q_idx,
