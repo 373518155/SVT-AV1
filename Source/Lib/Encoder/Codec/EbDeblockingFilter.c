@@ -1102,27 +1102,21 @@ static int32_t search_filter_level(
     int32_t filt_mid    = clamp(lvl, min_filter_level, max_filter_level);
     int32_t filter_step = filt_mid < 16 ? 4 : filt_mid / 4;
 
-    EbBool is_16bit = (EbBool)(pcs_ptr->parent_pcs_ptr->scs_ptr->static_config.encoder_bit_depth >
-                               EB_8BIT);
-    EbPictureBufferDesc *recon_buffer = is_16bit ? pcs_ptr->recon_picture16bit_ptr
-                                                 : pcs_ptr->recon_picture_ptr;
-
-    if (pcs_ptr->parent_pcs_ptr->is_used_as_reference_flag == EB_TRUE) {
+    EbPictureBufferDesc *recon_buffer;
+    EbBool is_16bit = pcs_ptr->parent_pcs_ptr->scs_ptr->static_config.is_16bit_pipeline ||
+        pcs_ptr->parent_pcs_ptr->scs_ptr->static_config.encoder_bit_depth > EB_8BIT;
+    if (pcs_ptr->parent_pcs_ptr->is_used_as_reference_flag)
         //get the 16bit form of the input SB
-        if (pcs_ptr->parent_pcs_ptr->scs_ptr->static_config.is_16bit_pipeline || is_16bit)
-            recon_buffer = ((EbReferenceObject *)
-                                pcs_ptr->parent_pcs_ptr->reference_picture_wrapper_ptr->object_ptr)
-                               ->reference_picture16bit;
-        else
-            recon_buffer = ((EbReferenceObject *)
-                                pcs_ptr->parent_pcs_ptr->reference_picture_wrapper_ptr->object_ptr)
-                               ->reference_picture;
-    } else { // non ref pictures
-        recon_buffer = (pcs_ptr->parent_pcs_ptr->scs_ptr->static_config.is_16bit_pipeline ||
-                        is_16bit)
-            ? pcs_ptr->recon_picture16bit_ptr
-            : pcs_ptr->recon_picture_ptr;
-    }
+        recon_buffer = is_16bit
+            ? ((EbReferenceObject *)
+                   pcs_ptr->parent_pcs_ptr->reference_picture_wrapper_ptr->object_ptr)
+                  ->reference_picture16bit
+            : ((EbReferenceObject *)
+                   pcs_ptr->parent_pcs_ptr->reference_picture_wrapper_ptr->object_ptr)
+                  ->reference_picture;
+    else // non ref pictures
+        recon_buffer = is_16bit ? pcs_ptr->recon_picture16bit_ptr : pcs_ptr->recon_picture_ptr;
+
     // Sum squared error at each filter level
     int64_t ss_err[MAX_LOOP_FILTER + 1];
 
