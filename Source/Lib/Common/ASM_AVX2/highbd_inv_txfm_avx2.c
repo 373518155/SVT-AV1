@@ -5128,7 +5128,6 @@ static void idct64_low8_avx2(__m256i *in, __m256i *out, int32_t bit, int32_t do_
 
 static void idct64_low16_avx2(__m256i *in, __m256i *out, int32_t bit, int32_t do_cols, int32_t bd,
                               int32_t out_shift) {
-    int32_t        i, j;
     const int32_t *cospi     = cospi_arr(bit);
     const __m256i  rnding    = _mm256_set1_epi32(1 << (bit - 1));
     const int32_t  log_range = AOMMAX(16, bd + (do_cols ? 6 : 8));
@@ -5319,7 +5318,7 @@ static void idct64_low16_avx2(__m256i *in, __m256i *out, int32_t bit, int32_t do
         u[21] = tmp3;
         u[22] = tmp4;
 
-        for (i = 32; i < 64; i += 8) {
+        for (int32_t i = 32; i < 64; i += 8) {
             addsub_avx2(u[i + 0], u[i + 3], &u[i + 0], &u[i + 3], &clamp_lo, &clamp_hi);
             addsub_avx2(u[i + 1], u[i + 2], &u[i + 1], &u[i + 2], &clamp_lo, &clamp_hi);
 
@@ -5341,7 +5340,7 @@ static void idct64_low16_avx2(__m256i *in, __m256i *out, int32_t bit, int32_t do
         u[13] = half_btf_avx2(&cospim16, &u[10], &cospi48, &u[13], &rnding, bit);
         u[10] = tmp2;
 
-        for (i = 16; i < 32; i += 8) {
+        for (int32_t i = 16; i < 32; i += 8) {
             addsub_avx2(u[i + 0], u[i + 3], &u[i + 0], &u[i + 3], &clamp_lo, &clamp_hi);
             addsub_avx2(u[i + 1], u[i + 2], &u[i + 1], &u[i + 2], &clamp_lo, &clamp_hi);
 
@@ -5399,15 +5398,16 @@ static void idct64_low16_avx2(__m256i *in, __m256i *out, int32_t bit, int32_t do
         u[20] = tmp3;
         u[21] = tmp4;
 
-        for (i = 32; i < 64; i += 16) {
-            for (j = i; j < i + 4; j++) {
+        for (int32_t i = 32; i < 64; i += 16) {
+            for (int32_t j = i; j < i + 4; j++) {
                 addsub_avx2(u[j], u[j ^ 7], &u[j], &u[j ^ 7], &clamp_lo, &clamp_hi);
                 addsub_avx2(u[j ^ 15], u[j ^ 8], &u[j ^ 15], &u[j ^ 8], &clamp_lo, &clamp_hi);
             }
         }
 
         // stage 8
-        for (i = 0; i < 4; ++i) addsub_avx2(u[i], u[7 - i], &u[i], &u[7 - i], &clamp_lo, &clamp_hi);
+        for (int32_t i = 0; i < 4; ++i)
+            addsub_avx2(u[i], u[7 - i], &u[i], &u[7 - i], &clamp_lo, &clamp_hi);
         idct64_stage8_avx2(u,
                            &cospim32,
                            &cospi32,
