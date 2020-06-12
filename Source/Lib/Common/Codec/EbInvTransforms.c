@@ -827,14 +827,12 @@ void eb_av1_iadst8_new(const int32_t *input, int32_t *output, int8_t cos_bit,
     assert(output != input);
     const int32_t *cospi = cospi_arr(cos_bit);
 
-    int32_t  stage = 0;
     int32_t *bf0, *bf1;
     int32_t  step[8];
 
     // stage 0;
 
     // stage 1;
-    stage++;
     bf1    = output;
     bf1[0] = input[7];
     bf1[1] = input[0];
@@ -847,7 +845,6 @@ void eb_av1_iadst8_new(const int32_t *input, int32_t *output, int8_t cos_bit,
     //range_check_buf(stage, input, bf1, size, stage_range[stage]);
 
     // stage 2
-    stage++;
     bf0    = output;
     bf1    = step;
     bf1[0] = half_btf(cospi[4], bf0[0], cospi[60], bf0[1], cos_bit);
@@ -861,21 +858,19 @@ void eb_av1_iadst8_new(const int32_t *input, int32_t *output, int8_t cos_bit,
     //range_check_buf(stage, input, bf1, size, stage_range[stage]);
 
     // stage 3
-    stage++;
     bf0    = step;
     bf1    = output;
-    bf1[0] = clamp_value(bf0[0] + bf0[4], stage_range[stage]);
-    bf1[1] = clamp_value(bf0[1] + bf0[5], stage_range[stage]);
-    bf1[2] = clamp_value(bf0[2] + bf0[6], stage_range[stage]);
-    bf1[3] = clamp_value(bf0[3] + bf0[7], stage_range[stage]);
-    bf1[4] = clamp_value(bf0[0] - bf0[4], stage_range[stage]);
-    bf1[5] = clamp_value(bf0[1] - bf0[5], stage_range[stage]);
-    bf1[6] = clamp_value(bf0[2] - bf0[6], stage_range[stage]);
-    bf1[7] = clamp_value(bf0[3] - bf0[7], stage_range[stage]);
+    bf1[0] = clamp_value(bf0[0] + bf0[4], stage_range[3]);
+    bf1[1] = clamp_value(bf0[1] + bf0[5], stage_range[3]);
+    bf1[2] = clamp_value(bf0[2] + bf0[6], stage_range[3]);
+    bf1[3] = clamp_value(bf0[3] + bf0[7], stage_range[3]);
+    bf1[4] = clamp_value(bf0[0] - bf0[4], stage_range[3]);
+    bf1[5] = clamp_value(bf0[1] - bf0[5], stage_range[3]);
+    bf1[6] = clamp_value(bf0[2] - bf0[6], stage_range[3]);
+    bf1[7] = clamp_value(bf0[3] - bf0[7], stage_range[3]);
     //range_check_buf(stage, input, bf1, size, stage_range[stage]);
 
     // stage 4
-    stage++;
     bf0    = output;
     bf1    = step;
     bf1[0] = bf0[0];
@@ -889,21 +884,19 @@ void eb_av1_iadst8_new(const int32_t *input, int32_t *output, int8_t cos_bit,
     //range_check_buf(stage, input, bf1, size, stage_range[stage]);
 
     // stage 5
-    stage++;
     bf0    = step;
     bf1    = output;
-    bf1[0] = clamp_value(bf0[0] + bf0[2], stage_range[stage]);
-    bf1[1] = clamp_value(bf0[1] + bf0[3], stage_range[stage]);
-    bf1[2] = clamp_value(bf0[0] - bf0[2], stage_range[stage]);
-    bf1[3] = clamp_value(bf0[1] - bf0[3], stage_range[stage]);
-    bf1[4] = clamp_value(bf0[4] + bf0[6], stage_range[stage]);
-    bf1[5] = clamp_value(bf0[5] + bf0[7], stage_range[stage]);
-    bf1[6] = clamp_value(bf0[4] - bf0[6], stage_range[stage]);
-    bf1[7] = clamp_value(bf0[5] - bf0[7], stage_range[stage]);
+    bf1[0] = clamp_value(bf0[0] + bf0[2], stage_range[5]);
+    bf1[1] = clamp_value(bf0[1] + bf0[3], stage_range[5]);
+    bf1[2] = clamp_value(bf0[0] - bf0[2], stage_range[5]);
+    bf1[3] = clamp_value(bf0[1] - bf0[3], stage_range[5]);
+    bf1[4] = clamp_value(bf0[4] + bf0[6], stage_range[5]);
+    bf1[5] = clamp_value(bf0[5] + bf0[7], stage_range[5]);
+    bf1[6] = clamp_value(bf0[4] - bf0[6], stage_range[5]);
+    bf1[7] = clamp_value(bf0[5] - bf0[7], stage_range[5]);
     //range_check_buf(stage, input, bf1, size, stage_range[stage]);
 
     // stage 6
-    stage++;
     bf0    = output;
     bf1    = step;
     bf1[0] = bf0[0];
@@ -917,7 +910,6 @@ void eb_av1_iadst8_new(const int32_t *input, int32_t *output, int8_t cos_bit,
     //range_check_buf(stage, input, bf1, size, stage_range[stage]);
 
     // stage 7
-    stage++;
     bf0    = step;
     bf1    = output;
     bf1[0] = bf0[0];
@@ -934,14 +926,12 @@ void eb_av1_iadst16_new(const int32_t *input, int32_t *output, int8_t cos_bit,
     assert(output != input);
     const int32_t *cospi = cospi_arr(cos_bit);
 
-    int32_t  stage = 0;
     int32_t *bf0, *bf1;
     int32_t  step[16];
 
     // stage 0;
 
     // stage 1;
-    stage++;
     bf1     = output;
     bf1[0]  = input[15];
     bf1[1]  = input[0];
@@ -962,7 +952,6 @@ void eb_av1_iadst16_new(const int32_t *input, int32_t *output, int8_t cos_bit,
     //range_check_buf(stage, input, bf1, size, stage_range[stage]);
 
     // stage 2
-    stage++;
     bf0     = output;
     bf1     = step;
     bf1[0]  = half_btf(cospi[2], bf0[0], cospi[62], bf0[1], cos_bit);
@@ -984,29 +973,27 @@ void eb_av1_iadst16_new(const int32_t *input, int32_t *output, int8_t cos_bit,
     //range_check_buf(stage, input, bf1, size, stage_range[stage]);
 
     // stage 3
-    stage++;
     bf0     = step;
     bf1     = output;
-    bf1[0]  = clamp_value(bf0[0] + bf0[8], stage_range[stage]);
-    bf1[1]  = clamp_value(bf0[1] + bf0[9], stage_range[stage]);
-    bf1[2]  = clamp_value(bf0[2] + bf0[10], stage_range[stage]);
-    bf1[3]  = clamp_value(bf0[3] + bf0[11], stage_range[stage]);
-    bf1[4]  = clamp_value(bf0[4] + bf0[12], stage_range[stage]);
-    bf1[5]  = clamp_value(bf0[5] + bf0[13], stage_range[stage]);
-    bf1[6]  = clamp_value(bf0[6] + bf0[14], stage_range[stage]);
-    bf1[7]  = clamp_value(bf0[7] + bf0[15], stage_range[stage]);
-    bf1[8]  = clamp_value(bf0[0] - bf0[8], stage_range[stage]);
-    bf1[9]  = clamp_value(bf0[1] - bf0[9], stage_range[stage]);
-    bf1[10] = clamp_value(bf0[2] - bf0[10], stage_range[stage]);
-    bf1[11] = clamp_value(bf0[3] - bf0[11], stage_range[stage]);
-    bf1[12] = clamp_value(bf0[4] - bf0[12], stage_range[stage]);
-    bf1[13] = clamp_value(bf0[5] - bf0[13], stage_range[stage]);
-    bf1[14] = clamp_value(bf0[6] - bf0[14], stage_range[stage]);
-    bf1[15] = clamp_value(bf0[7] - bf0[15], stage_range[stage]);
+    bf1[0]  = clamp_value(bf0[0] + bf0[8], stage_range[3]);
+    bf1[1]  = clamp_value(bf0[1] + bf0[9], stage_range[3]);
+    bf1[2]  = clamp_value(bf0[2] + bf0[10], stage_range[3]);
+    bf1[3]  = clamp_value(bf0[3] + bf0[11], stage_range[3]);
+    bf1[4]  = clamp_value(bf0[4] + bf0[12], stage_range[3]);
+    bf1[5]  = clamp_value(bf0[5] + bf0[13], stage_range[3]);
+    bf1[6]  = clamp_value(bf0[6] + bf0[14], stage_range[3]);
+    bf1[7]  = clamp_value(bf0[7] + bf0[15], stage_range[3]);
+    bf1[8]  = clamp_value(bf0[0] - bf0[8], stage_range[3]);
+    bf1[9]  = clamp_value(bf0[1] - bf0[9], stage_range[3]);
+    bf1[10] = clamp_value(bf0[2] - bf0[10], stage_range[3]);
+    bf1[11] = clamp_value(bf0[3] - bf0[11], stage_range[3]);
+    bf1[12] = clamp_value(bf0[4] - bf0[12], stage_range[3]);
+    bf1[13] = clamp_value(bf0[5] - bf0[13], stage_range[3]);
+    bf1[14] = clamp_value(bf0[6] - bf0[14], stage_range[3]);
+    bf1[15] = clamp_value(bf0[7] - bf0[15], stage_range[3]);
     //range_check_buf(stage, input, bf1, size, stage_range[stage]);
 
     // stage 4
-    stage++;
     bf0     = output;
     bf1     = step;
     bf1[0]  = bf0[0];
@@ -1028,29 +1015,27 @@ void eb_av1_iadst16_new(const int32_t *input, int32_t *output, int8_t cos_bit,
     //range_check_buf(stage, input, bf1, size, stage_range[stage]);
 
     // stage 5
-    stage++;
     bf0     = step;
     bf1     = output;
-    bf1[0]  = clamp_value(bf0[0] + bf0[4], stage_range[stage]);
-    bf1[1]  = clamp_value(bf0[1] + bf0[5], stage_range[stage]);
-    bf1[2]  = clamp_value(bf0[2] + bf0[6], stage_range[stage]);
-    bf1[3]  = clamp_value(bf0[3] + bf0[7], stage_range[stage]);
-    bf1[4]  = clamp_value(bf0[0] - bf0[4], stage_range[stage]);
-    bf1[5]  = clamp_value(bf0[1] - bf0[5], stage_range[stage]);
-    bf1[6]  = clamp_value(bf0[2] - bf0[6], stage_range[stage]);
-    bf1[7]  = clamp_value(bf0[3] - bf0[7], stage_range[stage]);
-    bf1[8]  = clamp_value(bf0[8] + bf0[12], stage_range[stage]);
-    bf1[9]  = clamp_value(bf0[9] + bf0[13], stage_range[stage]);
-    bf1[10] = clamp_value(bf0[10] + bf0[14], stage_range[stage]);
-    bf1[11] = clamp_value(bf0[11] + bf0[15], stage_range[stage]);
-    bf1[12] = clamp_value(bf0[8] - bf0[12], stage_range[stage]);
-    bf1[13] = clamp_value(bf0[9] - bf0[13], stage_range[stage]);
-    bf1[14] = clamp_value(bf0[10] - bf0[14], stage_range[stage]);
-    bf1[15] = clamp_value(bf0[11] - bf0[15], stage_range[stage]);
+    bf1[0]  = clamp_value(bf0[0] + bf0[4], stage_range[5]);
+    bf1[1]  = clamp_value(bf0[1] + bf0[5], stage_range[5]);
+    bf1[2]  = clamp_value(bf0[2] + bf0[6], stage_range[5]);
+    bf1[3]  = clamp_value(bf0[3] + bf0[7], stage_range[5]);
+    bf1[4]  = clamp_value(bf0[0] - bf0[4], stage_range[5]);
+    bf1[5]  = clamp_value(bf0[1] - bf0[5], stage_range[5]);
+    bf1[6]  = clamp_value(bf0[2] - bf0[6], stage_range[5]);
+    bf1[7]  = clamp_value(bf0[3] - bf0[7], stage_range[5]);
+    bf1[8]  = clamp_value(bf0[8] + bf0[12], stage_range[5]);
+    bf1[9]  = clamp_value(bf0[9] + bf0[13], stage_range[5]);
+    bf1[10] = clamp_value(bf0[10] + bf0[14], stage_range[5]);
+    bf1[11] = clamp_value(bf0[11] + bf0[15], stage_range[5]);
+    bf1[12] = clamp_value(bf0[8] - bf0[12], stage_range[5]);
+    bf1[13] = clamp_value(bf0[9] - bf0[13], stage_range[5]);
+    bf1[14] = clamp_value(bf0[10] - bf0[14], stage_range[5]);
+    bf1[15] = clamp_value(bf0[11] - bf0[15], stage_range[5]);
     //range_check_buf(stage, input, bf1, size, stage_range[stage]);
 
     // stage 6
-    stage++;
     bf0     = output;
     bf1     = step;
     bf1[0]  = bf0[0];
@@ -1072,29 +1057,27 @@ void eb_av1_iadst16_new(const int32_t *input, int32_t *output, int8_t cos_bit,
     //range_check_buf(stage, input, bf1, size, stage_range[stage]);
 
     // stage 7
-    stage++;
     bf0     = step;
     bf1     = output;
-    bf1[0]  = clamp_value(bf0[0] + bf0[2], stage_range[stage]);
-    bf1[1]  = clamp_value(bf0[1] + bf0[3], stage_range[stage]);
-    bf1[2]  = clamp_value(bf0[0] - bf0[2], stage_range[stage]);
-    bf1[3]  = clamp_value(bf0[1] - bf0[3], stage_range[stage]);
-    bf1[4]  = clamp_value(bf0[4] + bf0[6], stage_range[stage]);
-    bf1[5]  = clamp_value(bf0[5] + bf0[7], stage_range[stage]);
-    bf1[6]  = clamp_value(bf0[4] - bf0[6], stage_range[stage]);
-    bf1[7]  = clamp_value(bf0[5] - bf0[7], stage_range[stage]);
-    bf1[8]  = clamp_value(bf0[8] + bf0[10], stage_range[stage]);
-    bf1[9]  = clamp_value(bf0[9] + bf0[11], stage_range[stage]);
-    bf1[10] = clamp_value(bf0[8] - bf0[10], stage_range[stage]);
-    bf1[11] = clamp_value(bf0[9] - bf0[11], stage_range[stage]);
-    bf1[12] = clamp_value(bf0[12] + bf0[14], stage_range[stage]);
-    bf1[13] = clamp_value(bf0[13] + bf0[15], stage_range[stage]);
-    bf1[14] = clamp_value(bf0[12] - bf0[14], stage_range[stage]);
-    bf1[15] = clamp_value(bf0[13] - bf0[15], stage_range[stage]);
+    bf1[0]  = clamp_value(bf0[0] + bf0[2], stage_range[7]);
+    bf1[1]  = clamp_value(bf0[1] + bf0[3], stage_range[7]);
+    bf1[2]  = clamp_value(bf0[0] - bf0[2], stage_range[7]);
+    bf1[3]  = clamp_value(bf0[1] - bf0[3], stage_range[7]);
+    bf1[4]  = clamp_value(bf0[4] + bf0[6], stage_range[7]);
+    bf1[5]  = clamp_value(bf0[5] + bf0[7], stage_range[7]);
+    bf1[6]  = clamp_value(bf0[4] - bf0[6], stage_range[7]);
+    bf1[7]  = clamp_value(bf0[5] - bf0[7], stage_range[7]);
+    bf1[8]  = clamp_value(bf0[8] + bf0[10], stage_range[7]);
+    bf1[9]  = clamp_value(bf0[9] + bf0[11], stage_range[7]);
+    bf1[10] = clamp_value(bf0[8] - bf0[10], stage_range[7]);
+    bf1[11] = clamp_value(bf0[9] - bf0[11], stage_range[7]);
+    bf1[12] = clamp_value(bf0[12] + bf0[14], stage_range[7]);
+    bf1[13] = clamp_value(bf0[13] + bf0[15], stage_range[7]);
+    bf1[14] = clamp_value(bf0[12] - bf0[14], stage_range[7]);
+    bf1[15] = clamp_value(bf0[13] - bf0[15], stage_range[7]);
     //range_check_buf(stage, input, bf1, size, stage_range[stage]);
 
     // stage 8
-    stage++;
     bf0     = output;
     bf1     = step;
     bf1[0]  = bf0[0];
@@ -1116,7 +1099,6 @@ void eb_av1_iadst16_new(const int32_t *input, int32_t *output, int8_t cos_bit,
     //range_check_buf(stage, input, bf1, size, stage_range[stage]);
 
     // stage 9
-    stage++;
     bf0     = step;
     bf1     = output;
     bf1[0]  = bf0[0];
@@ -3765,4 +3747,3 @@ void invert_quant(int16_t *quant, int16_t *shift, int32_t d) {
     *quant = (int16_t)(m - (1 << 16));
     *shift = 1 << (16 - l);
 }
-
