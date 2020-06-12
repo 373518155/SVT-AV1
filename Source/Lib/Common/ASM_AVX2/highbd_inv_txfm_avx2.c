@@ -6023,7 +6023,7 @@ static void highbd_inv_txfm2d_add_idtx_avx2(const int32_t *input, uint16_t *outp
     const Transform1dAvx2 col_txfm =
         highbd_txfm_all_1d_zeros_w8_arr[txh_idx][vitx_1d_tab[tx_type]][0];
 
-    int32_t ud_flip, lr_flip, j;
+    int32_t ud_flip, lr_flip;
     get_flip_cfg(tx_type, &ud_flip, &lr_flip);
 
     // 1st stage: row transform
@@ -6041,7 +6041,7 @@ static void highbd_inv_txfm2d_add_idtx_avx2(const int32_t *input, uint16_t *outp
 
         __m256i *_buf1 = buf1 + i * 8;
 
-        for (j = 0; j < (input_stride >> 3); ++j) {
+        for (int32_t j = 0; j < (input_stride >> 3); ++j) {
             _buf1[j * txfm_size_row + 0] = buf0[j * 8 + 0];
             _buf1[j * txfm_size_row + 1] = buf0[j * 8 + 1];
             _buf1[j * txfm_size_row + 2] = buf0[j * 8 + 2];
