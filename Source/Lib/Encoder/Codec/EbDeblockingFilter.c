@@ -1040,27 +1040,20 @@ static int64_t try_filter_frame(
     if (plane == 0 && dir == 1)
         filter_level[0] = frm_hdr->loop_filter_params.filter_level[0];
 
-    EbBool is_16bit = (EbBool)(pcs_ptr->parent_pcs_ptr->scs_ptr->static_config.encoder_bit_depth >
-                               EB_8BIT);
-    EbPictureBufferDesc *recon_buffer = is_16bit ? pcs_ptr->recon_picture16bit_ptr
-                                                 : pcs_ptr->recon_picture_ptr;
-    if (pcs_ptr->parent_pcs_ptr->is_used_as_reference_flag == EB_TRUE) {
+    EbPictureBufferDesc *recon_buffer;
+    EbBool is_16bit = pcs_ptr->parent_pcs_ptr->scs_ptr->static_config.is_16bit_pipeline ||
+        pcs_ptr->parent_pcs_ptr->scs_ptr->static_config.encoder_bit_depth > EB_8BIT;
+    if (pcs_ptr->parent_pcs_ptr->is_used_as_reference_flag)
         //get the 16bit form of the input SB
-        if (pcs_ptr->parent_pcs_ptr->scs_ptr->static_config.is_16bit_pipeline || is_16bit) {
-            recon_buffer = ((EbReferenceObject *)
-                                pcs_ptr->parent_pcs_ptr->reference_picture_wrapper_ptr->object_ptr)
-                               ->reference_picture16bit;
-        } else {
-            recon_buffer = ((EbReferenceObject *)
-                                pcs_ptr->parent_pcs_ptr->reference_picture_wrapper_ptr->object_ptr)
-                               ->reference_picture;
-        }
-    } else { // non ref pictures
-        recon_buffer = (pcs_ptr->parent_pcs_ptr->scs_ptr->static_config.is_16bit_pipeline ||
-                        is_16bit)
-            ? pcs_ptr->recon_picture16bit_ptr
-            : pcs_ptr->recon_picture_ptr;
-    }
+        recon_buffer = is_16bit
+            ? ((EbReferenceObject *)
+                   pcs_ptr->parent_pcs_ptr->reference_picture_wrapper_ptr->object_ptr)
+                  ->reference_picture16bit
+            : ((EbReferenceObject *)
+                   pcs_ptr->parent_pcs_ptr->reference_picture_wrapper_ptr->object_ptr)
+                  ->reference_picture;
+    else // non ref pictures
+        recon_buffer = is_16bit ? pcs_ptr->recon_picture16bit_ptr : pcs_ptr->recon_picture_ptr;
 
     // set base filters for use of get_filter_level when in DELTA_Q_LF mode
     switch (plane) {
