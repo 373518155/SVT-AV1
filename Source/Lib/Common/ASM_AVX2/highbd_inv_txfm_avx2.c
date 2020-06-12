@@ -4891,7 +4891,6 @@ static void idct64_low1_avx2(__m256i *in, __m256i *out, int32_t bit, int32_t do_
 
 static void idct64_low8_avx2(__m256i *in, __m256i *out, int32_t bit, int32_t do_cols, int32_t bd,
                              int32_t out_shift) {
-    int32_t        i, j;
     const int32_t *cospi     = cospi_arr(bit);
     const __m256i  rnding    = _mm256_set1_epi32(1 << (bit - 1));
     const int32_t  log_range = AOMMAX(16, bd + (do_cols ? 6 : 8));
@@ -5090,8 +5089,8 @@ static void idct64_low8_avx2(__m256i *in, __m256i *out, int32_t bit, int32_t do_
         temp2 = half_btf_avx2(&cospim48, &u[21], &cospim16, &u[26], &rnding, bit);
         u[26] = half_btf_avx2(&cospim16, &u[21], &cospi48, &u[26], &rnding, bit);
         u[21] = temp2;
-        for (i = 32; i < 64; i += 16) {
-            for (j = i; j < i + 4; j++) {
+        for (int32_t i = 32; i < 64; i += 16) {
+            for (int32_t j = i; j < i + 4; j++) {
                 addsub_avx2(u[j], u[j ^ 7], &u[j], &u[j ^ 7], &clamp_lo, &clamp_hi);
                 addsub_avx2(u[j ^ 15], u[j ^ 8], &u[j ^ 15], &u[j ^ 8], &clamp_lo, &clamp_hi);
             }
