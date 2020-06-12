@@ -1163,10 +1163,9 @@ static int32_t search_filter_level(
 
         if (filt_direction <= 0 && filt_low != filt_mid) {
             // Get Low filter error score
-            if (ss_err[filt_low] < 0) {
+            if (ss_err[filt_low] < 0)
                 ss_err[filt_low] = try_filter_frame(
                     sd, temp_lf_recon_buffer, pcs_ptr, filt_low, partial_frame, plane, dir);
-            }
             // If value is close to the best so far then bias towards a lower loop
             // filter value.
             if (ss_err[filt_low] < (best_err + bias)) {
@@ -1179,16 +1178,13 @@ static int32_t search_filter_level(
 
         // Now look at filt_high
         if (filt_direction >= 0 && filt_high != filt_mid) {
-            if (ss_err[filt_high] < 0) {
+            if (ss_err[filt_high] < 0)
                 ss_err[filt_high] = try_filter_frame(
                     sd, temp_lf_recon_buffer, pcs_ptr, filt_high, partial_frame, plane, dir);
-            }
             // If value is significantly better than previous best, bias added against
             // raising filter value
-            if (ss_err[filt_high] < (best_err - bias)) {
-                best_err  = ss_err[filt_high];
+            if (ss_err[filt_high] < (best_err - bias))
                 filt_best = filt_high;
-            }
         }
     } else {
         while (filter_step > 0) {
@@ -1207,10 +1203,9 @@ static int32_t search_filter_level(
 
             if (filt_direction <= 0 && filt_low != filt_mid) {
                 // Get Low filter error score
-                if (ss_err[filt_low] < 0) {
+                if (ss_err[filt_low] < 0)
                     ss_err[filt_low] = try_filter_frame(
                         sd, temp_lf_recon_buffer, pcs_ptr, filt_low, partial_frame, plane, dir);
-                }
                 // If value is close to the best so far then bias towards a lower loop
                 // filter value.
                 if (ss_err[filt_low] < (best_err + bias)) {
@@ -1229,10 +1224,8 @@ static int32_t search_filter_level(
                 }
                 // If value is significantly better than previous best, bias added against
                 // raising filter value
-                if (ss_err[filt_high] < (best_err - bias)) {
-                    best_err  = ss_err[filt_high];
+                if (ss_err[filt_high] < (best_err - bias))
                     filt_best = filt_high;
-                }
             }
 
             // Half the step distance if the best filter value was the same as last time
