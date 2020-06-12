@@ -1584,7 +1584,6 @@ static void jnt_convolve_2d_ver_6tap_avx2(const int16_t *const im_block, const i
         (1 << offset_bits) - (1 << (offset_bits - 1));
     const int32_t offset_no_avg = (1 << (round_1 - 1)) + (1 << offset_bits) +
         (1 << (offset_bits - 1));
-    int32_t      y   = h;
     ConvBufType *dst = conv_params->dst;
 
     if (w == 2) {
@@ -1610,7 +1609,7 @@ static void jnt_convolve_2d_ver_6tap_avx2(const int16_t *const im_block, const i
         ss_128[0] = _mm_unpacklo_epi16(src01, src12);
         ss_128[1] = _mm_unpacklo_epi16(src23, src34);
 
-        y = h;
+        int32_t y = h;
 
         if (conv_params->do_average) {
             if (conv_params->use_jnt_comp_avg) {
@@ -1671,7 +1670,7 @@ static void jnt_convolve_2d_ver_6tap_avx2(const int16_t *const im_block, const i
             ss_256[0] = _mm256_unpacklo_epi16(s_256[0], s_256[1]);
             ss_256[1] = _mm256_unpacklo_epi16(s_256[2], s_256[3]);
 
-            y = h;
+            int32_t y = h;
 
             if (conv_params->do_average) {
                 if (conv_params->use_jnt_comp_avg) {
@@ -1718,7 +1717,7 @@ static void jnt_convolve_2d_ver_6tap_avx2(const int16_t *const im_block, const i
             s_256[1] = _mm256_loadu_si256((__m256i *)(im + 1 * 8));
             s_256[2] = _mm256_loadu_si256((__m256i *)(im + 2 * 8));
             s_256[3] = _mm256_loadu_si256((__m256i *)(im + 3 * 8));
-            y        = h;
+            int32_t y = h;
 
             __m256i ss_256[6];
 
@@ -1763,7 +1762,7 @@ static void jnt_convolve_2d_ver_6tap_avx2(const int16_t *const im_block, const i
             __m256i s_256[6], ss_256[6], tt_256[6], r[4];
 
             loadu_unpack_16bit_5rows_avx2(im, 16, s_256, ss_256, tt_256);
-            y = h;
+            int32_t y = h;
 
             if (conv_params->do_average) {
                 if (conv_params->use_jnt_comp_avg) {
@@ -1810,7 +1809,7 @@ static void jnt_convolve_2d_ver_6tap_avx2(const int16_t *const im_block, const i
                 loadu_unpack_16bit_5rows_avx2(s, w, s_256[0], ss_256[0], tt_256[0]);
                 loadu_unpack_16bit_5rows_avx2(s + 16, w, s_256[1], ss_256[1], tt_256[1]);
 
-                y = h;
+                int32_t y = h;
 
                 if (conv_params->do_average) {
                     if (conv_params->use_jnt_comp_avg) {
